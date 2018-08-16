@@ -45,6 +45,19 @@ function foldr -a fun -a arr
 end
 ```
 
+chain(_callbacks[]_, arr[]) => results[]
+```fish
+function chain -a funcs -a arr
+  set res $$arr
+  for i in $$funcs
+    for a in (seq (count $$arr))
+      set res[$a] (eval $i $res[$a] )
+    end
+  end
+  echo $res
+end
+```
+
 ForEach(_callback_,arr[]) => void
 ```fish
 function forEach -a fun -a arr

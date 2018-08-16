@@ -45,6 +45,15 @@ function forEach -a fun -a arr
     end
 end
 
+function chain -a funcs -a arr
+  set res $$arr
+  for i in $$funcs
+    for a in (seq (count $$arr))
+      set res[$a] (eval $i $res[$a] )
+    end
+  end
+  echo $res
+end
 
 #function isEven
 #    set erg (math "$argv[1] % 2")
