@@ -38,6 +38,26 @@ function foldr -a fun -a arr
   echo $res
 end
 
+function unfold
+  set func $argv[1]
+  if set -q argv[3]
+    set init $argv[2]
+    set limit $argv[3]
+  else
+    set init 0
+    set limit $argv[2]
+  end
+  if set -q argv[4]
+    set step $argv[4]
+  else
+    set step 1
+  end
+  for i in (seq $init $step $limit)
+    set out $out (eval $func $i)
+  end
+  echo $out
+end
+
 function forEach -a fun -a arr
     set func $argv[1]
     for i in $$arr
