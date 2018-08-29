@@ -16,7 +16,7 @@ function filter -a fun -a arr
           end
       end
       echo $ret
-  end
+end
 
 function map -a fun -a arr
     set func $argv[1]
@@ -58,6 +58,40 @@ function unfold
   echo $out
 end
 
+function zip -a arr1 -a arr2
+  if expr (count $$arr1) '>' (count $$arr2)
+    set arrlength (count $$arr1)
+  else
+    set arrlength (count $$arr2)
+  end
+  if expr (count $$arr1) = (count $$arr2)
+    set use 1
+  end
+
+  function next -a lastindex -a arr
+    if expr $lastindex != (count $$arr)
+      echo (math $lastindex+1)
+    else
+      next (math $lastindex-(count $$arr)) arr
+    end
+  end
+
+  set index1 1
+  set index2 1
+  set index 1
+  set alice $$arr1
+  set bob $$arr2
+  set out (seq $arrlength )
+
+  while expr $index != $arrlength
+    set out[$index] "$alice[$index1] $bob[$index2]"
+    set index1 (next $index alice)
+    set index2 (next $index bob)
+    set index (math $index+1)
+  end
+  echo $out
+end
+
 function forEach -a fun -a arr
     set func $argv[1]
     for i in $$arr
@@ -74,22 +108,3 @@ function chain -a funcs -a arr
   end
   echo $res
 end
-
-#function isEven
-#    set erg (math "$argv[1] % 2")
-#    if  test $erg -eq 0 
-#        echo 0
-#    else
-#        echo 1
-#    end
-#end
-#
-#function timestwo
-#    set res (math "$argv[1] * 2")
-#    echo $res
-#end
-#
-##Test lines
-#set bob 7 8 2
-#map timestwo bob
-#forEach isEven bob
